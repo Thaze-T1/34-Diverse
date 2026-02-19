@@ -3,60 +3,77 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MUGEN Archive | Visual Search</title>
+    <title>34 Diverse | Resource Hub</title>
     <style>
-        /* BRANDING & TERMINAL AESTHETIC */
+        /* COLOR PALETTE: DEEP TACTICAL BLUE */
+        :root {
+            --bg-color: #050a14;        /* Near-black blue */
+            --container-bg: #0d1626;   /* Dark navy */
+            --accent-blue: #1e3a8a;    /* Muted tactical blue */
+            --text-main: #e2e8f0;      /* Soft white */
+            --text-dim: #94a3b8;       /* Slate grey */
+            --border-color: #1e293b;   /* Subtle blue-grey border */
+        }
+
         body { 
-            background-color: #0a0a0a; 
-            color: #e0e0e0; 
-            font-family: 'Courier New', Courier, monospace; 
+            background-color: var(--bg-color); 
+            color: var(--text-main); 
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; 
             margin: 0;
-            padding: 20px;
+            padding: 40px 20px;
         }
+
         .interface-container { 
-            max-width: 1100px; 
+            max-width: 1000px; 
             margin: 0 auto; 
-            border: 1px solid #333;
-            background-color: #111;
+            background-color: var(--container-bg);
             padding: 40px;
-            box-shadow: 0 0 20px rgba(0, 255, 0, 0.05);
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
         }
+
         h1 { 
-            color: #00ff00; 
+            color: var(--text-main); 
             text-align: center; 
             text-transform: uppercase; 
-            letter-spacing: 5px;
-            text-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+            letter-spacing: 3px;
+            font-weight: 700;
             margin-bottom: 5px;
         }
-        .status-bar {
+
+        .brand-subtext {
             text-align: center;
-            font-size: 12px;
-            color: #666;
+            font-size: 14px;
+            color: var(--text-dim);
             margin-bottom: 30px;
-            border-bottom: 1px solid #222;
-            padding-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
-        /* SEARCH ENGINE OVERRIDES */
+
+        /* CUSTOMIZING THE GOOGLE SEARCH BAR TO MATCH */
         .gcse-search { margin-top: 20px; }
         .gsc-control-cse {
             background-color: transparent !important;
             border: none !important;
+            padding: 0 !important;
         }
     </style>
 </head>
 <body>
 
     <div class="interface-container">
-        <h1>MUGEN DATA HARVESTER</h1>
-        <div class="status-bar">STATUS: OPERATIONAL | DATABASE: !-Z SECURED | VISUAL PREVIEW: ENABLED</div>
+        <h1>34 Diverse</h1>
+        <div class="brand-subtext">Comprehensive Intelligence | Visual Archive</div>
         
-        <p style="text-align: center; color: #888;">Input character tag to extract visual intel and download locations.</p>
-
-        <script src="https://cse.google.com/cse.js?cx=<script async src="https://cse.google.com/cse.js?cx=009717e1737854e57">
+        <script async src="https://cse.google.com/cse.js?cx=<script async src="https://cse.google.com/cse.js?cx=009717e1737854e57">
 </script>
 <div class="gcse-search"></div>"></script>
         <div class="gcse-search"></div>
+        
+        <p style="text-align: center; font-size: 12px; color: #475569; margin-top: 40px;">
+            SECURE ACCESS ONLY. AUTHORIZED TAG EXTRACTION IN PROGRESS.
+        </p>
     </div>
 
 </body>
