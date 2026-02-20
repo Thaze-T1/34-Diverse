@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>34 Diverse Terminal</title>
     <style>
+        /* THE STABLE INTERFACE */
         body { background-color: #050a14; color: #e0e0e0; font-family: sans-serif; padding: 20px; line-height: 1.6; max-width: 800px; margin: auto; }
         .safety-box { border: 2px solid #1e3a8a; padding: 20px; background: #0d1626; border-radius: 12px; margin-bottom: 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.8); }
         h1 { color: #ffffff; text-align: center; border-bottom: 1px solid #1e3a8a; padding-bottom: 10px; }
@@ -14,13 +15,14 @@
         /* THE VIDEO INTERCEPTOR LAYER (HIDDEN) */
         #v-layer {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.9); display: none; z-index: 10000;
+            background: rgba(0,0,0,0.95); display: none; z-index: 10000;
             justify-content: center; align-items: center;
         }
         #v-close {
-            position: absolute; top: 20px; right: 30px; color: white;
-            font-size: 30px; cursor: pointer; font-weight: bold;
+            position: absolute; top: 20px; right: 30px; color: #60a5fa;
+            font-size: 20px; cursor: pointer; font-weight: bold; border: 1px solid #1e3a8a; padding: 5px 15px;
         }
+        #v-close:hover { background: #1e3a8a; color: white; }
     </style>
 </head>
 <body>
@@ -29,20 +31,62 @@
 
     <div class="safety-box">
         <h3>👋 Welcome to the Hub:</h3>
-        <p>Decryption active. <span class="highlight">Video Interceptor</span> is now online. Search results containing video intel will open in the local engine.</p>
-        <p style="text-align: center; font-style: italic; color: #1e3a8a;">Search with intent.</p>
+        <p>Decryption active. <span class="highlight">Pulse Monitor</span> is scanning for video intel. Links will be intercepted and played locally.</p>
     </div>
 
     <script async src="https://cse.google.com/cse.js?cx=009717e1737854e57"></script>
     <div class="gcse-search"></div>
 
     <div id="v-layer">
-        <span id="v-close" onclick="closeVideo()">&times; CLOSE</span>
-        <div id="v-frame" style="width: 80%; height: 80%; background: #000; border: 2px solid #1e3a8a;"></div>
+        <span id="v-close" onclick="closeVideo()">[ CLOSE TERMINAL ]</span>
+        <div id="v-frame" style="width: 85%; height: 80%; background: #000; border: 1px solid #1e3a8a; box-shadow: 0 0 20px #1e3a8a;"></div>
     </div>
 
     <script>
-        // THE INTERCEPTOR LOGIC
-        document.addEventListener('click', function(e) {
-            const a = e.target.closest('a');
-            if (!a) return;
+        // THE PULSE MONITOR: HIJACKS LINKS INSIDE THE SEARCH RESULTS
+        function interceptLinks() {
+            // Target all links inside the Google Search container
+            const links = document.querySelectorAll('.gcse-search a, .gsc-result a, .gs-title a');
+            
+            links.forEach(a => {
+                if (a.getAttribute('data-intercepted')) return;
+
+                const url = a.href;
+                const isYT = url.includes('youtube.com/watch') || url.includes('youtu.be');
+                const isVideoFile = url.match(/\.(mp4|webm|ogg)$/i);
+
+                if (isYT || isVideoFile) {
+                    a.setAttribute('data-intercepted', 'true');
+                    // We use an Event Listener to override Google's default click
+                    a.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        openVideo(url, isYT);
+                    }, true);
+                }
+            });
+        }
+
+        function openVideo(url, isYT) {
+            document.getElementById('v-layer').style.display = 'flex';
+            const frame = document.getElementById('v-frame');
+
+            if (isYT) {
+                const id = url.split('v=')[1]?.split('&')[0] || url.split('/').pop();
+                frame.innerHTML = `<iframe width="100%" height="100%" src="https://www.youtube.com/embed/${id}?autoplay=1" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
+            } else {
+                frame.innerHTML = `<video width="100%" height="100%" controls autoplay><source src="${url}" type="video/mp4"></video>`;
+            }
+        }
+
+        function closeVideo() {
+            document.getElementById('v-layer').style.display = 'none';
+            document.getElementById('v-frame').innerHTML = ''; 
+        }
+
+        // START THE SCANNER: Runs every 1 second to catch links as they load
+        setInterval(interceptLinks, 1000);
+    </script>
+
+</body>
+</html>
