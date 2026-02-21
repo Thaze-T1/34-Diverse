@@ -87,55 +87,6 @@
         // START THE SCANNER: Runs every 1 second to catch links as they load
         setInterval(interceptLinks, 1000);
     </script>
-<style>
-  /* FORCED EXPANSION: Prevents the website from cutting off results */
-  .gsc-results-wrapper-visible {
-    display: block !important;
-    height: auto !important;
-    overflow: visible !important;
-  }
 
-  /* PAGINATION HIGHLIGHT: Makes the "1 2 3 4 Next" stand out at the bottom */
-  .gsc-cursor-box {
-    margin: 40px auto !important;
-    text-align: center !important;
-    display: block !important;
-  }
-
-  .gsc-cursor-page {
-    font-size: 18px !important;
-    padding: 10px 15px !important;
-    color: #22c55e !important; /* Terminal Green */
-    background-color: #0d1626 !important;
-    border: 1px solid #1e3a8a !important;
-    margin: 5px !important;
-    text-decoration: none !important;
-    display: inline-block !important;
-  }
-
-  /* Ensures the "Visitor" doesn't hide the bottom of the page */
-  body, html {
-    height: auto !important;
-    min-height: 100% !important;
-    overflow-y: auto !important;
-  }
-</style>
-
-<script>
-  // TACTICAL OVERRIDE: 
-  // This script waits for the Google Engine to load and 
-  // forces the "Results per page" behavior if possible.
-  window.__gcse = {
-    parsetags: 'explicit',
-    callback: function() {
-      if (document.readyState == 'complete') {
-        // The engine is primed. Google handles the "Infinite" part 
-        // via the pagination numbers it generates at the bottom.
-        console.log("34_DIVERSE: OMNI_SCROLL_ENABLED");
-      }
-    }
-  };
-</script>
-    
 </body>
 </html>
