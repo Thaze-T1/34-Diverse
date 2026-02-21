@@ -2,91 +2,107 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>34 Diverse Terminal</title>
+    <title>34 DIVERSE // INFINITE_BREACH</title>
     <style>
-        /* THE STABLE INTERFACE */
-        body { background-color: #050a14; color: #e0e0e0; font-family: sans-serif; padding: 20px; line-height: 1.6; max-width: 800px; margin: auto; }
-        .safety-box { border: 2px solid #1e3a8a; padding: 20px; background: #0d1626; border-radius: 12px; margin-bottom: 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.8); }
-        h1 { color: #ffffff; text-align: center; border-bottom: 1px solid #1e3a8a; padding-bottom: 10px; }
-        .highlight { color: #60a5fa; font-weight: bold; }
-        .warning-text { color: #94a3b8; }
+        body { background-color: #050a14; color: #60a5fa; font-family: 'Courier New', monospace; margin: 0; padding: 20px; }
+        .terminal-header { border-bottom: 2px solid #1e3a8a; padding-bottom: 20px; text-align: center; position: sticky; top: 0; background: #050a14; z-index: 100; }
+        h1 { color: #22c55e; letter-spacing: 5px; text-shadow: 0 0 10px #22c55e; margin: 0; }
+        #query { background: #0d1626; border: 1px solid #1e3a8a; color: #22c55e; padding: 12px; width: 300px; outline: none; }
+        .btn { background: #1e3a8a; color: white; border: 1px solid #60a5fa; padding: 12px 25px; cursor: pointer; font-weight: bold; }
+        
+        #intel-feed { margin-top: 30px; display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 20px; }
+        .intel-card { border: 1px solid #1e3a8a; background: #000; overflow: hidden; display: flex; flex-direction: column; }
+        .viewport { width: 100%; position: relative; padding-top: 56.25%; background: #050a14; }
+        .viewport iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
+        .card-content { padding: 15px; background: rgba(13, 22, 38, 0.95); }
+        .result-title { color: #22c55e; font-size: 14px; text-decoration: none; font-weight: bold; }
 
-        /* THE VIDEO INTERCEPTOR LAYER (HIDDEN) */
-        #v-layer {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.95); display: none; z-index: 10000;
-            justify-content: center; align-items: center;
-        }
-        #v-close {
-            position: absolute; top: 20px; right: 30px; color: #60a5fa;
-            font-size: 20px; cursor: pointer; font-weight: bold; border: 1px solid #1e3a8a; padding: 5px 15px;
-        }
-        #v-close:hover { background: #1e3a8a; color: white; }
+        /* PAGINATION STYLING */
+        #pagination-control { text-align: center; padding: 40px; display: none; }
+        .load-btn { background: #22c55e; color: #050a14; border: none; padding: 15px 40px; font-weight: bold; cursor: pointer; text-transform: uppercase; }
+        .load-btn:hover { background: #16a34a; box-shadow: 0 0 15px #22c55e; }
     </style>
 </head>
 <body>
 
-    <h1>[ 34 DIVERSE ] - Search Terminal</h1>
-
-    <div class="safety-box">
-        <h3>👋 Welcome to the Hub:</h3>
-        <p>Decryption active. <span class="highlight">Pulse Monitor</span> is scanning for video intel. Links will be intercepted and played locally.</p>
+    <div class="terminal-header">
+        <h1>34 DIVERSE</h1>
+        <p>> [SECTOR]: <span id="current-sector">READY</span> | [PAGE]: <span id="page-num">1</span></p>
+        <input type="text" id="query" placeholder="IDENTIFY TARGET...">
+        <button class="btn" onclick="initialSearch()">START EXTRACTION</button>
     </div>
 
-    <script async src="https://cse.google.com/cse.js?cx=009717e1737854e57"></script>
-    <div class="gcse-search"></div>
+    <div id="intel-feed"></div>
 
-    <div id="v-layer">
-        <span id="v-close" onclick="closeVideo()">[ CLOSE TERMINAL ]</span>
-        <div id="v-frame" style="width: 85%; height: 80%; background: #000; border: 1px solid #1e3a8a; box-shadow: 0 0 20px #1e3a8a;"></div>
+    <div id="pagination-control">
+        <button class="load-btn" onclick="fetchNextWave()">REQUEST NEXT WAVE</button>
     </div>
 
     <script>
-        // THE PULSE MONITOR: HIJACKS LINKS INSIDE THE SEARCH RESULTS
-        function interceptLinks() {
-            // Target all links inside the Google Search container
-            const links = document.querySelectorAll('.gcse-search a, .gsc-result a, .gs-title a');
+        let currentPage = 1;
+        let lastQuery = "";
+
+        // Reset for a brand new search
+        function initialSearch() {
+            const q = document.getElementById('query').value;
+            if(!q) return;
             
-            links.forEach(a => {
-                if (a.getAttribute('data-intercepted')) return;
-
-                const url = a.href;
-                const isYT = url.includes('youtube.com/watch') || url.includes('youtu.be');
-                const isVideoFile = url.match(/\.(mp4|webm|ogg)$/i);
-
-                if (isYT || isVideoFile) {
-                    a.setAttribute('data-intercepted', 'true');
-                    // We use an Event Listener to override Google's default click
-                    a.addEventListener('click', function(e) {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        openVideo(url, isYT);
-                    }, true);
-                }
-            });
+            lastQuery = q;
+            currentPage = 1;
+            document.getElementById('intel-feed').innerHTML = "";
+            document.getElementById('page-num').innerText = currentPage;
+            executeBreach();
         }
 
-        function openVideo(url, isYT) {
-            document.getElementById('v-layer').style.display = 'flex';
-            const frame = document.getElementById('v-frame');
+        // Fetch the next set of results
+        function fetchNextWave() {
+            currentPage++;
+            document.getElementById('page-num').innerText = currentPage;
+            executeBreach();
+        }
 
-            if (isYT) {
-                const id = url.split('v=')[1]?.split('&')[0] || url.split('/').pop();
-                frame.innerHTML = `<iframe width="100%" height="100%" src="https://www.youtube.com/embed/${id}?autoplay=1" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
-            } else {
-                frame.innerHTML = `<video width="100%" height="100%" controls autoplay><source src="${url}" type="video/mp4"></video>`;
+        async function executeBreach() {
+            const feed = document.getElementById('intel-feed');
+            const status = document.getElementById('current-sector');
+            status.innerText = "EXTRACTING WAVE " + currentPage;
+
+            // Invidious API uses the 'page' parameter for pagination
+            const url = `https://vid.priv.au/api/v1/search?q=${encodeURIComponent(lastQuery)}&page=${currentPage}`;
+
+            try {
+                const response = await fetch(url);
+                const results = await response.json();
+
+                if (results.length === 0) {
+                    status.innerText = "END OF DATA";
+                    document.getElementById('pagination-control').style.display = "none";
+                    return;
+                }
+
+                results.forEach(item => {
+                    if(item.type !== "video") return;
+
+                    const card = document.createElement('div');
+                    card.className = 'intel-card';
+                    card.innerHTML = `
+                        <div class="viewport">
+                            <iframe src="https://www.youtube.com/embed/${item.videoId}" allowfullscreen loading="lazy"></iframe>
+                        </div>
+                        <div class="card-content">
+                            <a class="result-title" href="https://youtube.com/watch?v=${item.videoId}" target="_blank">${item.title}</a>
+                        </div>`;
+                    feed.appendChild(card);
+                });
+
+                // Reveal the "Load More" button after the first wave pops
+                document.getElementById('pagination-control').style.display = "block";
+                status.innerText = "SIGNAL_CLEAN";
+
+            } catch (e) {
+                status.innerText = "CONNECTION_FAIL";
+                console.error(e);
             }
         }
-
-        function closeVideo() {
-            document.getElementById('v-layer').style.display = 'none';
-            document.getElementById('v-frame').innerHTML = ''; 
-        }
-
-        // START THE SCANNER: Runs every 1 second to catch links as they load
-        setInterval(interceptLinks, 1000);
     </script>
-
 </body>
 </html>
