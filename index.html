@@ -1,59 +1,12 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>34 DIVERSE // STABLE_INJECTION</title>
-    <style>
-        body { background-color: #050a14; color: #60a5fa; font-family: 'Courier New', monospace; margin: 0; padding: 20px; }
-        .terminal-header { border-bottom: 2px solid #1e3a8a; padding-bottom: 20px; text-align: center; }
-        h1 { color: #22c55e; letter-spacing: 5px; text-shadow: 0 0 10px #22c55e; margin: 0; }
-        
-        /* SEARCH ZONE */
-        #google-extraction-zone {
-            margin-top: 30px;
-            padding: 10px;
-            min-height: 200px;
-            border: 1px solid #1e3a8a;
-            background: rgba(13, 22, 38, 0.5);
-        }
-
-        /* FORCE VISIBILITY: Ensuring Google's elements aren't hidden */
-        .gcse-search, .gsc-control-cse {
-            display: block !important;
-            visibility: visible !important;
-            opacity: 1 !important;
-        }
-
-        /* TERMINAL THEME FOR RESULTS */
-        .gsc-control-cse { background-color: transparent !important; border: none !important; }
-        .gsc-webResult { background-color: #000 !important; border: 1px solid #1e3a8a !important; margin-bottom: 10px !important; }
-        .gs-title, .gs-title * { color: #22c55e !important; text-decoration: none !important; }
-        .gs-snippet { color: #94a3b8 !important; }
-        
-        /* Fixing the search button appearance */
-        .gsc-search-button-v2 { background-color: #1e3a8a !important; border: 1px solid #60a5fa !important; }
-    </style>
+    <title>34 DIVERSE // RAW_ENTRY</title>
 </head>
-<body>
+<body style="background-color: #000; color: #fff;">
 
-    <div class="terminal-header">
-        <h1>34 DIVERSE</h1>
-        <p style="font-size: 12px; color: #1e3a8a;">> [ENGINE_STATUS]: <span style="color: #22c55e;">ONLINE</span></p>
-    </div>
+    <script async src="https://cse.google.com/cse.js?cx=78f99e82110c14995"></script>
+    <div class="gcse-search"></div>
 
-    <div id="google-extraction-zone">
-        <script async src="https://cse.google.com/cse.js?cx=78f99e82110c14995"></script>
-        <div class="gcse-search"></div>
-
-        </div>
-
-    <script>
-        // Emergency Script: If Google doesn't load in 3 seconds, alert the Agent
-        setTimeout(() => {
-            if (!document.querySelector('.gsc-control-cse')) {
-                console.log("ENGINE_STALLED: Check if the CX code is correct.");
-            }
-        }, 3000);
-    </script>
-</body>
+    </body>
 </html>
